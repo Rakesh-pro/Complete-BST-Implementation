@@ -1,0 +1,165 @@
+package javapra;
+
+public class TreeNode<T extends Comparable<T>> {
+	T element;
+	TreeNode<T> left;
+	TreeNode<T> right;
+	
+	//Constructors
+	
+	TreeNode(T o){
+		this.element= o;
+		this.left = null;
+		this.right=null;
+	}
+	
+	TreeNode(){
+		this.element=null;
+		this.left =  null;
+		this.right = null;
+	}
+	
+	//Insertion Method
+	
+	public void insert(T o) {
+		if(element.compareTo(o)<0) {
+			if(right==null) 
+				right=new TreeNode<T>(o);
+			else 
+				right.insert(o);
+		}else if(element.compareTo(o)>0) {
+			if(left==null) 
+				left=new TreeNode<T>(o);
+			else 
+				left.insert(o);
+		}
+	}
+	
+	//Deletion Method
+	
+	TreeNode delete(TreeNode root,T key) {
+		if(root==null) return root;
+		if(root.element.compareTo(key)<0)
+			root.right=delete(root.right,key);
+		else if(root.element.compareTo(key)>0)
+			root.left=delete(root.left,key);
+		else {
+			if(root.left==null)
+				return root.right;
+			if(root.right==null)
+				return root.left;
+			
+			root.element=inSucc(root.right);
+			root.right=delete(root.right,this.element);
+		}
+		return root;
+	}
+	
+	
+	//used to get successive element by below Successor Method
+	
+	public T inSucc(TreeNode root) {
+		T minv=this.element;
+		while(root.left!=null) {
+			minv=this.left.element;
+			root=root.left;
+		}
+		return minv;
+	}
+	
+	
+	public TreeNode search(T key) {
+		if(this==null) return null;
+		else {
+			if(this.element.compareTo(key)==0)
+				return this;
+			if(this.element.compareTo(key)>0) {
+				if(this.left==null) return null;
+			    return this.left.search(key);}
+			else {
+				if(this.right==null) return null;
+			    return this.right.search(key);}
+		}
+	}
+	
+	
+	public void searchResult(T key) {
+		if(search(key)==null) System.out.println("Not Found");
+		System.out.println(key + " Found");
+	}
+	
+	//Tree Travasels
+	
+	//preorder traversal
+	
+	public void preorder(TreeNode<T> R) {
+		if(R!=null) {
+			R.visit();
+			preorder(R.left);
+			preorder(R.right);
+		}
+	}
+	
+	//Inorder traversal
+	
+	public void inorder(TreeNode<T> R) {
+		if(R!=null) {
+			preorder(R.left);
+			R.visit();
+			preorder(R.right);
+		}
+	}
+	
+	//postorder traversal
+	
+	public void postorder(TreeNode<T> R) {
+		if(R!=null) {
+			preorder(R.left);
+			preorder(R.right);
+			R.visit();
+		}
+	}
+	
+	
+	
+	public void visit() {
+		System.out.println(this.element+" ");
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		
+		TreeNode<Integer> root=new TreeNode<>(9);
+		
+		root.insert(1);
+		root.insert(2);
+		root.insert(3);
+		root.insert(4);
+		root.insert(5);
+		root.insert(6);
+		root.insert(7);
+		
+		
+		root.preorder(root);  System.out.println();
+		root.inorder(root);   System.out.println();
+		root.postorder(root); System.out.println();
+		
+		root.searchResult(7);
+		root.searchResult(2);
+		root.searchResult(4);
+		
+		root.delete(root, 6);
+		root.search(5);
+		root.search(19);
+		
+		root.inorder(root);   System.out.println();
+		
+		
+		
+	}
+}
+	
+		
+	
+
